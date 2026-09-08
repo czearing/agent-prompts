@@ -1,0 +1,21 @@
+# Node / npm
+node_modules/
+dist/
+build/
+*.log
+
+# OS metadata
+.DS_Store
+Thumbs.db
+desktop.ini
+
+# Environment and secrets
+.env
+.env.*
+*.local
+
+# Paperclip / Agent local runtime data
+.paperclip/
+.cairn-harness/
+*.db
+*.sqlite
