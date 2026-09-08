@@ -1,6 +1,6 @@
 # Autonomous Agent Prompts, Roles & Templates
 
-A production-grade, reusable collection of system prompts (`AGENTS.md` / `PROMPT.md`), persona specifications, communication skills, and operational templates for autonomous multi-agent software engineering organizations.
+A production-grade, 1:1 collection of autonomous system prompts (`AGENTS.md` / `PROMPT.md`), persona specifications, communication skills, and operational companion templates for autonomous multi-agent software engineering organizations.
 
 Designed for use with **[Paperclip](https://github.com/paperclipai/paperclip)**, **GitHub Copilot CLI**, and autonomous agent runtimes.
 
@@ -13,24 +13,30 @@ Designed for use with **[Paperclip](https://github.com/paperclipai/paperclip)**,
 ├── LICENSE
 ├── README.md
 ├── roles/
-│   ├── chief-of-staff/             # Executive governance, roster oversight, and triage
+│   ├── chief-of-staff/             # Executive governance, roster oversight, and escalation ladder
 │   │   ├── PROMPT.md
 │   │   ├── template.md
 │   │   └── README.md
-│   ├── prompt-engineer/            # Agent prompt design, optimization, and evaluation
+│   ├── prompt-engineer/            # Agent prompt design, optimization, and companion specs
 │   │   ├── PROMPT.md
-│   │   ├── agent-research-spec.md
+│   │   ├── agent-research-template.md
 │   │   ├── problem-solving-template.md
+│   │   ├── park-contract-block.md
 │   │   └── README.md
-│   ├── engineering-manager/        # Epic decomposition, subtask planning, dependency graphs
+│   ├── software-engineer/          # General software implementation, bug fixes, targeted validation
 │   │   ├── PROMPT.md
 │   │   ├── template.md
 │   │   └── README.md
-│   ├── software-engineer/          # Full-stack implementation, bug fixing, unit testing
+│   ├── tech-writer/                # Documentation quality, verification against current source
 │   │   ├── PROMPT.md
 │   │   ├── template.md
 │   │   └── README.md
-│   ├── pr-reviewer/                # Automated code review, security audits, severity reports
+│   ├── perf-engine-manager/        # Performance candidate selection, triage, and defect settlement
+│   │   ├── PROMPT.md
+│   │   └── template.md
+│   ├── perf-reviewer/              # Performance review checklist, task brief checks, risk analysis
+│   │   └── template.md
+│   ├── pr-reviewer/                # Code review checklist, validation candidate lists
 │   │   ├── PROMPT.md
 │   │   ├── template.md
 │   │   └── README.md
@@ -38,7 +44,13 @@ Designed for use with **[Paperclip](https://github.com/paperclipai/paperclip)**,
 │   │   ├── PROMPT.md
 │   │   ├── template.md
 │   │   └── README.md
-│   └── tech-writer/                # Comprehensive documentation, API references, architecture guides
+│   ├── tooling-engineer/           # Shared tooling scaffold, protocol surfaces, and handover gates
+│   │   ├── PROMPT.md
+│   │   └── template.md
+│   ├── workflow-auditor/           # Measuring operator surfaces, 5-part test plans, minimal edits
+│   │   ├── PROMPT.md
+│   │   └── template.md
+│   └── engineering-manager/        # Epic decomposition, subtask planning, dependency graphs
 │       ├── PROMPT.md
 │       ├── template.md
 │       └── README.md
@@ -46,64 +58,47 @@ Designed for use with **[Paperclip](https://github.com/paperclipai/paperclip)**,
 │   └── roster-and-communication-design/  # Multi-agent coordination protocols & communication skills
 │       └── SKILL.md
 └── templates/
-    ├── agent-design-spec.md        # Standard specification template for authoring new agent personas
-    ├── decision-log-template.md    # Organizational & architectural decision record template
-    ├── parking-contract-block.md   # Non-polling parking & execution contract block
-    ├── problem-solving-template.md # Structured investigation & bug diagnosis template
-    └── pr-review-template.md       # High-signal pull request review report template
+    ├── decision-log-template.md          # 1:1 Staffing & Architectural Decision Log
+    ├── agent-research-template.md        # 1:1 Agent Design & Research Spec
+    ├── problem-solving-template.md       # 1:1 Task Problem-Solving & Execution Log
+    ├── park-contract-block.md            # 1:1 Agent Parking & Blocker Contract Block
+    ├── task-template.md                  # 1:1 Engineering Task Log Template
+    ├── documentation-edit-log-template.md# 1:1 Documentation Edit Log Template
+    ├── pr-review-checklist.md            # 1:1 PR Review Checklist Template
+    ├── perf-review-checklist.md          # 1:1 Perf Review Checklist Template
+    ├── tooling-task-log.md               # 1:1 Tooling Task Log Template
+    ├── workflow-audit-cycle-log.md       # 1:1 Workflow Audit Cycle Log Template
+    └── perf-engine-cycle-log.md          # 1:1 Perf Engine Cycle Log Template
 ```
 
 ---
 
-## Agent Roles Overview
+## Agent Roles & Methodologies
 
-| Role | Hierarchy Level | Primary Charter | Recommended Models |
+| Role | Hierarchy Level | Primary Charter | Companion Template |
 |---|---|---|---|
-| **[Chief of Staff](roles/chief-of-staff/)** | Executive Orchestrator | Roster management, organization health, capacity allocation, cross-team triage | `claude-opus-5`, `gpt-5.6-sol`, `gemini-3.8-flash` |
-| **[Prompt Engineer](roles/prompt-engineer/)** | Agent Architect | Prompt authoring, benchmark optimization, skill and tool design | `claude-opus-5`, `gpt-5.6-sol`, `gemini-3.8-flash` |
-| **[Engineering Manager](roles/engineering-manager/)** | Team Manager | Epic decomposition, dependency graph design (`blockedByIssueIds`), milestone tracking | `gpt-5.6-sol`, `claude-sonnet-5`, `gemini-3.8-flash` |
-| **[Software Engineer](roles/software-engineer/)** | Individual Contributor | Feature development, bug fixing, refactoring, targeted testing | `claude-sonnet-5`, `gpt-5.6-sol`, `gemini-3.8-flash` |
-| **[PR Reviewer](roles/pr-reviewer/)** | Individual Contributor | Objective code reviews, security analysis, severity ranking, before/after fixes | `claude-opus-5`, `gpt-5.6-sol`, `gemini-3.8-flash` |
-| **[PR Updater](roles/pr-updater/)** | Individual Contributor | Resolving review comments, addressing CI/test failures, merge conflict resolution | `claude-sonnet-5`, `gpt-5.6-sol`, `gemini-3.8-flash` |
-| **[Tech Writer](roles/tech-writer/)** | Individual Contributor | High-volume documentation passes, API references, onboarding guides | `claude-sonnet-5`, `gpt-5.6-sol`, `gemini-3.8-flash` |
+| **[Chief of Staff](roles/chief-of-staff/)** | Executive Orchestrator | Roster decisions, escalation ladder (script -> prompt edit -> skill -> hire), message path design | `template.md` (Decision Log) |
+| **[Prompt Engineer](roles/prompt-engineer/)** | Agent Architect | Authoring `AGENTS.md` & companion templates (Role, Methodology, Instructions, Output, Rules) | `agent-research-template.md`, `problem-solving-template.md`, `park-contract-block.md` |
+| **[Software Engineer](roles/software-engineer/)** | Individual Contributor | Narrowest fix for root cause, pre-reproduction, performance expectation checks | `template.md` (Task Log) |
+| **[Tech Writer](roles/tech-writer/)** | Individual Contributor | Documentation rewrites, commands & comments verification, exclusion checks | `template.md` (Doc Edit Log) |
+| **[Perf Engine Manager](roles/perf-engine-manager/)** | Queue Owner | User-first candidate selection, rollup inspection, task defect settlement | `template.md` (Perf Cycle Log) |
+| **[Tooling Engineer](roles/tooling-engineer/)** | Tool Architect | Shared tooling scaffold, protocol surface tests, 4 communication channels, handover gates | `template.md` (Tooling Task Log) |
+| **[Workflow Auditor](roles/workflow-auditor/)** | Operations Auditor | Operator bottleneck measurement, 5-part test plans, deterministic collector filing | `template.md` (Audit Cycle Log) |
+| **[PR Reviewer](roles/pr-reviewer/)** | Quality Reviewer | Behavior, interaction, performance, and accessibility checks with pass/fail candidate lists | `template.md` (PR Review Checklist) |
+| **[PR Updater](roles/pr-updater/)** | Individual Contributor | Resolving review feedback, addressing CI failures, merge conflict resolution | `template.md` |
+| **[Engineering Manager](roles/engineering-manager/)** | Team Manager | Epic decomposition, dependency graphs (`blockedByIssueIds`), milestone tracking | `template.md` |
 
 ---
 
 ## Core Invariants & Operating Rules
 
-All agent prompts in this repository adhere to standard autonomy principles:
+All agent prompts in this repository adhere to standard Paperclip autonomy rules:
 
-1. **Rule #1: Never ask a human to do what an agent can do.** Decompose, delegate, and execute autonomously. Escalate to human operators only for security permissions, credentials, or public commitments.
-2. **Heartbeat Lifecycle Discipline**: Every agent operates within a bounded execution window:
-   ```
-   [Wake] -> [Read Identity & Context] -> [Checkout Task] -> [Investigate / Plan] -> [Execute Work] -> [Verify] -> [Update Status] -> [Park / Exit]
-   ```
-3. **No Busy-Polling**: Agents never sleep or loop waiting for external events. Long-running or asynchronous dependencies are managed via first-class `blockedByIssueIds`, waking agents upon completion (`issue_blockers_resolved` / `issue_children_completed`).
-4. **Targeted Verification**: Every code modification must be verified using the smallest targeted test or lint command before concluding the task.
-5. **Commit Attribution**: All Git commits include the standardized attribution trailer:
-   ```text
-   Co-Authored-By: Paperclip <noreply@paperclip.ing>
-   ```
-
----
-
-## Multi-Agent Coordination Protocols
-
-Detailed in `skills/roster-and-communication-design/SKILL.md`:
-
-- **The Courier Pattern (Lateral Coordination)**: Agents communicate across boundaries by creating self-contained subtasks for peer agents, linking dependencies via `blockedByIssueIds`.
-- **The Delegated Review Pattern**: PR reviewers post findings and verdicts directly on their assigned subtasks and mark them `done`, waking the author agent to apply remedies.
-- **Vertical Escalation**: When unrecoverable blockers or missing credentials arise, agents document the blocker in task comments and reassign the issue to their direct manager.
-
----
-
-## Using These Prompts in Paperclip
-
-To attach a role to an agent in Paperclip:
-
-1. Copy the corresponding `PROMPT.md` content into your agent's configuration or point `instructions-path` to the file.
-2. Ensure the agent has the `paperclip` skill attached in its configuration.
-3. Configure the agent's chain of command (e.g. `software-engineer` -> `engineering-manager` -> `chief-of-staff`).
+1. **Escalation Ladder Before Hiring**: The default answer to a hire request is no. A hire is only correct after a script, a hook, and a prompt edit have each been rejected in writing for a stated reason.
+2. **Deterministic Rules in Scripts**: If a rule can be checked deterministically, it belongs in a script or hook, not in an agent prompt.
+3. **No Busy-Polling & Explicit Parking**: Agents never loop or sleep waiting for asynchronous processes. When blocked, agents set `blockedByIssueIds` with an `unblockDescriptor` or schedule an explicit monitor.
+4. **Verifiable Claims & Reproductions**: A bug fix requires reproducing current behavior before code is touched. A doc edit requires verifying every stated command and comment against current declarations.
+5. **Zero Em Dashes**: Clean, standard punctuation across all prompts, templates, logs, and outputs.
 
 ---
 

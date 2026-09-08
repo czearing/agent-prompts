@@ -1,47 +1,101 @@
-# Chief of Staff Decision & Status Template
+# Staffing and Communication Decision Log
 
-Use this format when posting status summaries, staffing changes, or executive triage updates.
+## 1. Context and Problem Understanding
 
----
+### Request as Stated
+What was literally asked for:
 
-## Organizational Health & Triage Report
+### Outcome Actually Wanted
+The result the requester needs, stated without naming any org change:
 
-| Field | Value |
-|---|---|
-| **Date** | `<YYYY-MM-DD>` |
-| **Active Agents** | `<Count>` active / `<Count>` paused |
-| **Open Issues** | `<Count>` in progress / `<Count>` blocked / `<Count>` in review |
-| **Token Budget Health** | `<Percentage>%` of monthly allocation consumed |
+### Current Roster
+Pull with GET /api/companies/{companyId}/agents and the recent issue history for each agent.
 
----
+| Agent | Owns today | Spend / budget | Last heartbeat | Issues closed recently |
+| --- | --- | --- | --- | --- |
+|  |  |  |  |  |
 
-## 1. Executive Summary
-`<Two to three concise sentences summarizing overall organization throughput, major milestone progress, and immediate focus areas.>`
+### Constraints
+Budget, approval gates, write authority limits, and anything already in flight that touches this:
 
----
+## 2. Escalation Ladder
 
-## 2. Staffing & Roster Updates
+Walk in order. Record a verdict and a reason for every rung before moving to the next. Stop at the
+first rung that produces the outcome.
 
-| Agent Identifier | Role / Specialty | Status | Action Taken / Needed |
-|---|---|---|---|
-| `software-engineer-core` | Full-stack Implementation | Active | Re-allocated to critical path feature |
-| `pr-reviewer-quality` | Automated PR Review | Active | Updated review heuristics |
-| `tech-writer` | Documentation & Guides | Active | Backlog seeded with 12 guide updates |
+| Rung | Verdict | Reason | Owner if chosen |
+| --- | --- | --- | --- |
+| Deterministic script or hook |  |  |  |
+| Edit an existing agent's prompt |  |  |  |
+| New skill on an existing agent |  |  |  |
+| New agent |  |  |  |
 
----
+### Chosen Rung
+Which rung produces the outcome, and why the cheaper rungs above it do not:
 
-## 3. Blocker Resolution & Task Routing
+## 3. Communication Path
 
-### Unblocked Tasks
-- `[PREFIX-101](/PREFIX/issues/PREFIX-101)`: Upstream dependency merged; resumed by `software-engineer-core`.
-- `[PREFIX-105](/PREFIX/issues/PREFIX-105)`: Reassigned to `pr-updater` for automated CI fixes.
+### Path
+Draw the path end to end and count the hops:
 
-### Active Blockers Requiring Intervention
-- `[PREFIX-112](/PREFIX/issues/PREFIX-112)`: Blocked on external API credentials. Requested via secret proposal.
+### Who Absolutely Must Be Told
+List only the agents that have to act. Anyone who only needs to know reads the artifact instead.
 
----
+| Agent | Must act on what | Why an artifact is not enough |
+| --- | --- | --- |
+|  |  |  |
 
-## 4. Organizational Decisions & Next Actions
-1. **Decision**: Commission dedicated performance evaluation routine.
-2. **Delegation**: Assigned prompt specification to `prompt-engineer` (`[PREFIX-120](/PREFIX/issues/PREFIX-120)`).
-3. **Next Check**: Scheduled routine check on blocker resolution.
+### Round Trip Check
+For each adjacent pair on the path, how many round trips does one unit of work need? Any pair above
+one is a merge candidate. Record the merge decision.
+
+## 4. Cost and Risk
+
+[] Is the recurring cost of this verdict lower than the cost it removes?
+[] Does this add a hop to any path that already worked?
+[] Does this create a second writer on any artifact or surface?
+[] Does any agent now have to report status that nobody acts on?
+[] Can this be enforced deterministically instead of judged by an agent?
+
+### Cost Line
+Recurring cost of the chosen verdict, and what it replaces:
+
+## 5. Role Brief
+
+Fill this section only when the verdict is hire. All seven fields are required.
+
+- Owned decision:
+- Write authority:
+- Workspace:
+- Inputs:
+- Single upstream contact:
+- Single downstream contact:
+- Success metric:
+- Retire condition:
+
+## 6. Validation and Evidence
+
+### Test and Evaluation Plan
+Test 1:
+1.
+
+Test 2:
+1.
+
+### Evidence and Results
+Baseline:
+
+Outcome:
+
+## 7. Execution Checklist
+
+[] Outcome restated without naming an org change
+[] Live roster pulled with real spend and heartbeat data
+[] Every ladder rung above the chosen one rejected in writing with a reason
+[] Communication path drawn with a hop count
+[] Round trip check run on every adjacent pair
+[] Cost line filled in
+[] Role brief complete with all seven fields, or marked not applicable
+[] Exactly one issue filed to the owning agent, with the blocker edge set
+[] Success metric and retire condition recorded
+[] All placeholder text removed and the summary block reported

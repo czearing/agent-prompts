@@ -1,85 +1,53 @@
-# Problem-Solving & Execution Log
+# Task Problem-Solving & Execution Log
 
-Use this structured log template during complex investigation, bug diagnosis, and feature execution. Keep this document updated in the agent's scratchpad or issue document.
+## 1. Context & Problem Understanding
 
----
+### Problem Statement
+What is the task, goal, or problem to solve:
+Example: Synthesize customer feedback from Q3 into a clear narrative with a central theme.
 
-## 1. Issue Overview
-- **Issue ID**: `<PREFIX-123>`
-- **Title**: `<Issue Title>`
-- **Assignee**: `<Agent Name>`
-- **Goal**: `<One to two sentence definition of what success looks like>`
+### Background & Discovery
+What information, context, or constraints currently exist:
+Example: 300 survey responses collected; recurring complaints regarding onboarding complexity.
 
----
+## 2. Thesis & Strategy
 
-## 2. Initial Assessment & Diagnostic Plan
+### Core Thesis
+What is the central argument, root cause, or creative angle:
+Example: Onboarding friction is caused by asking users for configuration details before showing any product value.
 
-### 2.1 Symptom Analysis
-- What failed or is behaving unexpectedly?
-- What is the expected behavior?
-- Error messages, stack traces, or relevant telemetry:
-  ```text
-  <Paste error snippets, stack traces, or logs here>
-  ```
+### Proposed Strategy
+What is the planned approach or solution:
+Example: Restructure the narrative around a two-stage onboarding model and support it with direct user quotes.
 
-### 2.2 Working Hypotheses
-1. **Hypothesis A**: [Explanation of potential root cause]
-2. **Hypothesis B**: [Alternative explanation]
+Alternatives considered and why rejected:
+Example: Focusing only on UI styling was rejected because user feedback specifically points to process confusion rather than visual design.
 
-### 2.3 Diagnostic Plan
-- [ ] Inspect relevant source files: `path/to/source.ts`
-- [ ] Reproduce issue using targeted test command
-- [ ] Inspect runtime logs and environment configuration
+## 3. Risk & Impact Analysis
+[] Does this solution introduce unintended side effects or blind spots?
+[] Are claims supported by concrete facts, data, or source material?
+[] Is the approach minimal and direct, avoiding unnecessary complexity?
+[] How will each risk or weakness be evaluated?
 
----
+## 4. Validation & Evidence
 
-## 3. Findings & Root Cause Analysis
+### Test & Evaluation Plan
+Test 1:
+1. Example: Compare drafted findings against raw survey data to ensure zero unbacked claims.
 
-### 3.1 Investigation Notes
-- **Source Analysis**: [What was found in the code]
-- **Reproduction Output**: [Result of reproducing test or command]
-- **Key Evidence**: [Lines of code, commit diffs, or API responses confirming the cause]
+Test 2:
+1. Example: Review final draft against the core thesis to verify every section directly reinforces the main argument.
 
-### 3.2 Confirmed Root Cause
-`<Concise, technical description of the exact root cause>`
+### Evidence & Results
+Baseline:
+Example: Initial raw notes had 12 scattered complaints with no unified narrative.
 
----
+Outcome:
+Example: 1 cohesive brief organized under 3 clear supporting themes with cited quotes.
 
-## 4. Implementation Plan
-
-### 4.1 Surgical Changes Required
-| File | Action | Summary of Changes |
-|---|---|---|
-| `src/core/example.ts` | Edit | Fix null check and validate input schema |
-| `tests/unit/example.test.ts` | Edit / Create | Add regression unit test |
-
-### 4.2 Potential Side Effects & Mitigations
-- **Risk**: [Possible regression or edge case]
-- **Mitigation**: [How the fix or test ensures safety]
-
----
-
-## 5. Execution & Verification
-
-### 5.1 Verification Commands Run
-```bash
-# Targeted test command
-npm test -- tests/unit/example.test.ts
-
-# Targeted typecheck / lint
-npm run typecheck
-```
-
-### 5.2 Test Results
-- Status: **PASSED** (or **FAILED** with follow-up action)
-- Output Summary: `All 12 unit tests passed in 1.4s.`
-
----
-
-## 6. Disposition & Handoff Summary
-
-- **Status**: `done` | `in_review` | `blocked`
-- **Work Products Created**:
-  - Commit SHA: `<commit-sha>`
-  - PR Link / Work Product: `<PR URL or Work Product ID>`
-- **Next Steps**: [Handoff notes for reviewers, operators, or dependent tasks]
+## 5. Execution Checklist
+[] Review all source material and map constraints
+[] Formulate core thesis and record in this template
+[] Draft solution or content following the planned strategy
+[] Validate output against evidence and risk checklist
+[] Remove all placeholder text and save final output

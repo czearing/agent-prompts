@@ -1,75 +1,101 @@
-# Staffing & Architectural Decision Log
+# Staffing and Communication Decision Log
 
-Use this template to record organizational structure, agent staffing, role definitions, and system architecture decisions.
+## 1. Context and Problem Understanding
 
----
+### Request as Stated
+What was literally asked for:
 
-## 1. Decision Metadata
+### Outcome Actually Wanted
+The result the requester needs, stated without naming any org change:
 
-| Field | Value |
-|---|---|
-| **Decision ID** | `DEC-<YYYYMMDD>-<SHORT-SLUG>` |
-| **Date** | `<YYYY-MM-DD>` |
-| **Author / Agent** | `<Agent Name or Role>` |
-| **Status** | `PROPOSED` \| `APPROVED` \| `SUPERSEDED` \| `REJECTED` |
-| **Related Issues / PRs** | `<Link to relevant tickets>` |
+### Current Roster
+Pull with GET /api/companies/{companyId}/agents and the recent issue history for each agent.
 
----
+| Agent | Owns today | Spend / budget | Last heartbeat | Issues closed recently |
+| --- | --- | --- | --- | --- |
+|  |  |  |  |  |
 
-## 2. Context & Problem Statement
-*Describe the situation, challenge, or organizational bottleneck that requires a decision.*
+### Constraints
+Budget, approval gates, write authority limits, and anything already in flight that touches this:
 
-### Problem Summary
-- What is currently inefficient, broken, or ambiguous?
-- What triggered this evaluation?
-- What are the constraints (budget, latency, accuracy, safety)?
+## 2. Escalation Ladder
 
----
+Walk in order. Record a verdict and a reason for every rung before moving to the next. Stop at the
+first rung that produces the outcome.
 
-## 3. Evaluated Options
+| Rung | Verdict | Reason | Owner if chosen |
+| --- | --- | --- | --- |
+| Deterministic script or hook |  |  |  |
+| Edit an existing agent's prompt |  |  |  |
+| New skill on an existing agent |  |  |  |
+| New agent |  |  |  |
 
-### Option 1: [Short Title]
-- **Description**: [How this option works]
-- **Pros**:
-  - Point 1
-  - Point 2
-- **Cons**:
-  - Point 1
-  - Point 2
-- **Estimated Cost / Complexity**: [Low / Medium / High]
+### Chosen Rung
+Which rung produces the outcome, and why the cheaper rungs above it do not:
 
-### Option 2: [Short Title]
-- **Description**: [How this option works]
-- **Pros**:
-  - Point 1
-  - Point 2
-- **Cons**:
-  - Point 1
-  - Point 2
-- **Estimated Cost / Complexity**: [Low / Medium / High]
+## 3. Communication Path
 
----
+### Path
+Draw the path end to end and count the hops:
 
-## 4. Decision & Rationale
+### Who Absolutely Must Be Told
+List only the agents that have to act. Anyone who only needs to know reads the artifact instead.
 
-### Chosen Option
-**Option [Number]: [Title]**
+| Agent | Must act on what | Why an artifact is not enough |
+| --- | --- | --- |
+|  |  |  |
 
-### Rationale
-*Explain why this option was chosen over alternatives. Detail trade-offs accepted and expected benefits.*
+### Round Trip Check
+For each adjacent pair on the path, how many round trips does one unit of work need? Any pair above
+one is a merge candidate. Record the merge decision.
 
----
+## 4. Cost and Risk
 
-## 5. Implementation & Delegation Plan
+[] Is the recurring cost of this verdict lower than the cost it removes?
+[] Does this add a hop to any path that already worked?
+[] Does this create a second writer on any artifact or surface?
+[] Does any agent now have to report status that nobody acts on?
+[] Can this be enforced deterministically instead of judged by an agent?
 
-| Task ID | Action Item | Assignee Agent | Expected Outcome |
-|---|---|---|---|
-| 1 | Create new agent role specification | Prompt Engineer | New `AGENTS.md` committed |
-| 2 | Provision agent in control plane | Chief of Staff | Agent active with budget & skills |
-| 3 | Seed initial project backlog | Engineering Manager | Epics broken into prioritized tasks |
+### Cost Line
+Recurring cost of the chosen verdict, and what it replaces:
 
----
+## 5. Role Brief
 
-## 6. Follow-Up & Review Criteria
-- How will success be measured?
-- When should this decision be re-evaluated?
+Fill this section only when the verdict is hire. All seven fields are required.
+
+- Owned decision:
+- Write authority:
+- Workspace:
+- Inputs:
+- Single upstream contact:
+- Single downstream contact:
+- Success metric:
+- Retire condition:
+
+## 6. Validation and Evidence
+
+### Test and Evaluation Plan
+Test 1:
+1.
+
+Test 2:
+1.
+
+### Evidence and Results
+Baseline:
+
+Outcome:
+
+## 7. Execution Checklist
+
+[] Outcome restated without naming an org change
+[] Live roster pulled with real spend and heartbeat data
+[] Every ladder rung above the chosen one rejected in writing with a reason
+[] Communication path drawn with a hop count
+[] Round trip check run on every adjacent pair
+[] Cost line filled in
+[] Role brief complete with all seven fields, or marked not applicable
+[] Exactly one issue filed to the owning agent, with the blocker edge set
+[] Success metric and retire condition recorded
+[] All placeholder text removed and the summary block reported
