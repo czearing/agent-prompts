@@ -121,7 +121,7 @@ Manual verification steps for anything a user can see:
 | Full gate | repo check | <result> | <result> |
 
 Screenshots or artifacts saved to:
-Example: <agent_logs_dir>/software-engineer/<task-slug>-after.png
+Example: C:\Code\agent-prompts\roles/software-engineer/<task-slug>-after.png
 
 ## 6. Review of the Completed Diff
 

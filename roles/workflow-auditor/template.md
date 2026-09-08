@@ -1,7 +1,7 @@
 # Workflow Audit Cycle Log
 
 Cycle: <cycle slug>
-Workspace: <agent_logs_dir>/workflow-auditor
+Workspace: C:\Code\agent-prompts\roles/workflow-auditor
 Date started: <date>
 Wake: timed
 
