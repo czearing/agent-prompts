@@ -13,6 +13,15 @@ Designed for use with **[Paperclip](https://github.com/paperclipai/paperclip)**,
 ├── LICENSE
 ├── README.md
 ├── roles/
+│   ├── designer/                   # UI/UX design specs, design tokens, HTML/CSS component mockups
+│   │   ├── PROMPT.md
+│   │   └── templates/
+│   │       ├── design-spec-template.md
+│   │       └── component-spec-template.md
+│   ├── food-scientist/             # DP recipe prediction, chemical compound balance, food science testing
+│   │   ├── PROMPT.md
+│   │   └── templates/
+│   │       └── implementation-template.md
 │   ├── chief-of-staff/             # Executive governance, roster oversight, and escalation ladder
 │   │   ├── PROMPT.md
 │   │   ├── template.md
@@ -58,6 +67,9 @@ Designed for use with **[Paperclip](https://github.com/paperclipai/paperclip)**,
 │   └── roster-and-communication-design/  # Multi-agent coordination protocols & communication skills
 │       └── SKILL.md
 └── templates/
+    ├── design-spec-template.md           # 1:1 Book Cook Design Specification Template
+    ├── component-spec-template.md        # 1:1 Book Cook Component Specification Template
+    ├── food-science-implementation-template.md # 1:1 Book Cook AI Food Science Implementation & Testing Template
     ├── decision-log-template.md          # 1:1 Staffing & Architectural Decision Log
     ├── agent-research-template.md        # 1:1 Agent Design & Research Spec
     ├── problem-solving-template.md       # 1:1 Task Problem-Solving & Execution Log
@@ -77,13 +89,15 @@ Designed for use with **[Paperclip](https://github.com/paperclipai/paperclip)**,
 
 | Role | Hierarchy Level | Primary Charter | Companion Template |
 |---|---|---|---|
+| **[Designer (Book Cook)](roles/designer/)** | Individual Contributor | UI/UX design specifications, HTML/CSS component mocks, strict design tokens | `design-spec-template.md`, `component-spec-template.md` |
+| **[Food Scientist (Book Cook AI)](roles/food-scientist/)** | Individual Contributor | DP recipe prediction, chemical compound balance, food science testing invariants | `implementation-template.md` |
 | **[Chief of Staff](roles/chief-of-staff/)** | Executive Orchestrator | Roster decisions, escalation ladder (script -> prompt edit -> skill -> hire), message path design | `template.md` (Decision Log) |
 | **[Prompt Engineer](roles/prompt-engineer/)** | Agent Architect | Authoring `AGENTS.md` & companion templates (Role, Methodology, Instructions, Output, Rules) | `agent-research-template.md`, `problem-solving-template.md`, `park-contract-block.md` |
 | **[Software Engineer](roles/software-engineer/)** | Individual Contributor | Narrowest fix for root cause, pre-reproduction, performance expectation checks | `template.md` (Task Log) |
 | **[Tech Writer](roles/tech-writer/)** | Individual Contributor | Documentation rewrites, commands & comments verification, exclusion checks | `template.md` (Doc Edit Log) |
 | **[Perf Engine Manager](roles/perf-engine-manager/)** | Queue Owner | User-first candidate selection, rollup inspection, task defect settlement | `template.md` (Perf Cycle Log) |
 | **[Tooling Engineer](roles/tooling-engineer/)** | Tool Architect | Shared tooling scaffold, protocol surface tests, 4 communication channels, handover gates | `template.md` (Tooling Task Log) |
-| **[Workflow Auditor](roles/workflow-auditor/)** | Operations Auditor | Operator bottleneck measurement, 5-part test plans, deterministic collector filing | `template.md` (Audit Cycle Log) |
+| **[Workflow Auditor](roles/workflow-auditor/)** | Operations Auditor | Operator bottleneck measurement, 5-part test plans, minimal edits | `template.md` (Audit Cycle Log) |
 | **[PR Reviewer](roles/pr-reviewer/)** | Quality Reviewer | Behavior, interaction, performance, and accessibility checks with pass/fail candidate lists | `template.md` (PR Review Checklist) |
 | **[PR Updater](roles/pr-updater/)** | Individual Contributor | Resolving review feedback, addressing CI failures, merge conflict resolution | `template.md` |
 | **[Engineering Manager](roles/engineering-manager/)** | Team Manager | Epic decomposition, dependency graphs (`blockedByIssueIds`), milestone tracking | `template.md` |
