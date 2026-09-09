@@ -1,7 +1,7 @@
 {
   "schema_version": 1,
   "repository": "C:\\Code\\mix-tool",
-  "commit": "2f84297a63c1c0f3f0a78ad92080f6e957e8c344",
+  "commit": "393f2cb321b90e571f8d6b49c389a0e6b59d4eac",
   "report_evidence": {
     "runtimes": [
       {
@@ -36,169 +36,15 @@
   },
   "rows": [
     {
-      "case_id": "cathedral-pu",
-      "repository_case": "cathedral transfer",
-      "metric": "pu",
-      "evidence_status": "fail",
-      "current_metric": 7.029184,
-      "target": 1.0,
-      "gap": 6.029184,
-      "priority_reason": "perceptual gate failure",
-      "task_status": "in_progress",
-      "issue_identifier": "MUS-14",
-      "reproduction_command": "cargo run -q -p audio-effects --bin reverb_corpus_report",
-      "relevant_files": [
-        "crates\\audio-effects\\src\\reverb\\corpus_report.rs",
-        "crates\\audio-effects\\src\\reverb\\metrics.rs",
-        "crates\\audio-effects\\tests\\reverb_corpus_report.rs"
-      ],
-      "done_gate": "cathedral PU is at most 1.0 in the production corpus report.",
-      "evidence": "production schema v1 reports PU 7.029184 for cathedral",
-      "rank": 1,
-      "assignment_key": "edba1a33a460d869b6ee"
-    },
-    {
-      "case_id": "plate-pu",
-      "repository_case": "plate transfer",
-      "metric": "pu",
-      "evidence_status": "fail",
-      "current_metric": 2.480504,
-      "target": 1.0,
-      "gap": 1.480504,
-      "priority_reason": "perceptual gate failure",
-      "task_status": "queued",
-      "issue_identifier": "",
-      "reproduction_command": "cargo run -q -p audio-effects --bin reverb_corpus_report",
-      "relevant_files": [
-        "crates\\audio-effects\\src\\reverb\\corpus_report.rs",
-        "crates\\audio-effects\\src\\reverb\\metrics.rs",
-        "crates\\audio-effects\\tests\\reverb_corpus_report.rs"
-      ],
-      "done_gate": "plate PU is at most 1.0 in the production corpus report.",
-      "evidence": "production schema v1 reports PU 2.480504 for plate",
-      "rank": 2,
-      "assignment_key": "d6d120479ee909ec09c2"
-    },
-    {
-      "case_id": "medium-room-pu",
-      "repository_case": "medium-room transfer",
-      "metric": "pu",
-      "evidence_status": "fail",
-      "current_metric": 2.286499,
-      "target": 1.0,
-      "gap": 1.286499,
-      "priority_reason": "perceptual gate failure",
-      "task_status": "queued",
-      "issue_identifier": "",
-      "reproduction_command": "cargo run -q -p audio-effects --bin reverb_corpus_report",
-      "relevant_files": [
-        "crates\\audio-effects\\src\\reverb\\corpus_report.rs",
-        "crates\\audio-effects\\src\\reverb\\metrics.rs",
-        "crates\\audio-effects\\tests\\reverb_corpus_report.rs"
-      ],
-      "done_gate": "medium-room PU is at most 1.0 in the production corpus report.",
-      "evidence": "production schema v1 reports PU 2.286499 for medium-room",
-      "rank": 3,
-      "assignment_key": "138d0fb277079bc855a1"
-    },
-    {
-      "case_id": "concert-hall-pu",
-      "repository_case": "concert-hall transfer",
-      "metric": "pu",
-      "evidence_status": "fail",
-      "current_metric": 1.2151996,
-      "target": 1.0,
-      "gap": 0.2151996,
-      "priority_reason": "perceptual gate failure",
-      "task_status": "queued",
-      "issue_identifier": "",
-      "reproduction_command": "cargo run -q -p audio-effects --bin reverb_corpus_report",
-      "relevant_files": [
-        "crates\\audio-effects\\src\\reverb\\corpus_report.rs",
-        "crates\\audio-effects\\src\\reverb\\metrics.rs",
-        "crates\\audio-effects\\tests\\reverb_corpus_report.rs"
-      ],
-      "done_gate": "concert-hall PU is at most 1.0 in the production corpus report.",
-      "evidence": "production schema v1 reports PU 1.2151996 for concert-hall",
-      "rank": 4,
-      "assignment_key": "a271bb1b857a56517723"
-    },
-    {
-      "case_id": "concert-hall-paired-null-depth-db",
-      "repository_case": "concert-hall transfer",
-      "metric": "null_depth_db",
-      "evidence_status": "fail",
-      "current_metric": -5.356182,
-      "target": 40.0,
-      "gap": 45.356182,
-      "priority_reason": "null-depth gate failure",
-      "task_status": "queued",
-      "issue_identifier": "",
-      "reproduction_command": "cargo run -q -p audio-effects --bin reverb_corpus_report",
-      "relevant_files": [
-        "crates\\audio-effects\\src\\reverb\\corpus_report.rs",
-        "crates\\audio-effects\\src\\reverb\\metrics.rs",
-        "crates\\audio-effects\\tests\\reverb_corpus_report.rs"
-      ],
-      "done_gate": "concert-hall paired null depth is at least 40 dB in the production corpus report.",
-      "evidence": "production schema v1 reports paired null depth -5.356182 dB for concert-hall",
-      "rank": 5,
-      "assignment_key": "e29d42a51702349b56c2"
-    },
-    {
-      "case_id": "medium-room-paired-null-depth-db",
-      "repository_case": "medium-room transfer",
-      "metric": "null_depth_db",
-      "evidence_status": "fail",
-      "current_metric": -4.3943944,
-      "target": 40.0,
-      "gap": 44.3943944,
-      "priority_reason": "null-depth gate failure",
-      "task_status": "queued",
-      "issue_identifier": "",
-      "reproduction_command": "cargo run -q -p audio-effects --bin reverb_corpus_report",
-      "relevant_files": [
-        "crates\\audio-effects\\src\\reverb\\corpus_report.rs",
-        "crates\\audio-effects\\src\\reverb\\metrics.rs",
-        "crates\\audio-effects\\tests\\reverb_corpus_report.rs"
-      ],
-      "done_gate": "medium-room paired null depth is at least 40 dB in the production corpus report.",
-      "evidence": "production schema v1 reports paired null depth -4.3943944 dB for medium-room",
-      "rank": 6,
-      "assignment_key": "f8ff29fc18d8e2604896"
-    },
-    {
-      "case_id": "plate-paired-null-depth-db",
-      "repository_case": "plate transfer",
-      "metric": "null_depth_db",
-      "evidence_status": "fail",
-      "current_metric": -4.0800796,
-      "target": 40.0,
-      "gap": 44.0800796,
-      "priority_reason": "null-depth gate failure",
-      "task_status": "queued",
-      "issue_identifier": "",
-      "reproduction_command": "cargo run -q -p audio-effects --bin reverb_corpus_report",
-      "relevant_files": [
-        "crates\\audio-effects\\src\\reverb\\corpus_report.rs",
-        "crates\\audio-effects\\src\\reverb\\metrics.rs",
-        "crates\\audio-effects\\tests\\reverb_corpus_report.rs"
-      ],
-      "done_gate": "plate paired null depth is at least 40 dB in the production corpus report.",
-      "evidence": "production schema v1 reports paired null depth -4.0800796 dB for plate",
-      "rank": 7,
-      "assignment_key": "8c5297910e73f7f5e61a"
-    },
-    {
       "case_id": "cathedral-paired-null-depth-db",
       "repository_case": "cathedral transfer",
       "metric": "null_depth_db",
-      "evidence_status": "fail",
-      "current_metric": -3.5703897,
+      "evidence_status": "pass",
+      "current_metric": 53.822662,
       "target": 40.0,
-      "gap": 43.5703897,
-      "priority_reason": "null-depth gate failure",
-      "task_status": "queued",
+      "gap": 0,
+      "priority_reason": "ship gate satisfied",
+      "task_status": "satisfied",
       "issue_identifier": "",
       "reproduction_command": "cargo run -q -p audio-effects --bin reverb_corpus_report",
       "relevant_files": [
@@ -207,20 +53,174 @@
         "crates\\audio-effects\\tests\\reverb_corpus_report.rs"
       ],
       "done_gate": "cathedral paired null depth is at least 40 dB in the production corpus report.",
-      "evidence": "production schema v1 reports paired null depth -3.5703897 dB for cathedral",
+      "evidence": "production schema v1 reports paired null depth 53.822662 dB for cathedral",
+      "rank": 1,
+      "assignment_key": "16c6be8232f0485e9fa8"
+    },
+    {
+      "case_id": "cathedral-pu",
+      "repository_case": "cathedral transfer",
+      "metric": "pu",
+      "evidence_status": "pass",
+      "current_metric": 0.011038476,
+      "target": 1.0,
+      "gap": 0,
+      "priority_reason": "ship gate satisfied",
+      "task_status": "satisfied",
+      "issue_identifier": "",
+      "reproduction_command": "cargo run -q -p audio-effects --bin reverb_corpus_report",
+      "relevant_files": [
+        "crates\\audio-effects\\src\\reverb\\corpus_report.rs",
+        "crates\\audio-effects\\src\\reverb\\metrics.rs",
+        "crates\\audio-effects\\tests\\reverb_corpus_report.rs"
+      ],
+      "done_gate": "cathedral PU is at most 1.0 in the production corpus report.",
+      "evidence": "production schema v1 reports PU 0.011038476 for cathedral",
+      "rank": 2,
+      "assignment_key": "80151417841fa8f5565b"
+    },
+    {
+      "case_id": "concert-hall-paired-null-depth-db",
+      "repository_case": "concert-hall transfer",
+      "metric": "null_depth_db",
+      "evidence_status": "pass",
+      "current_metric": 51.123962,
+      "target": 40.0,
+      "gap": 0,
+      "priority_reason": "ship gate satisfied",
+      "task_status": "satisfied",
+      "issue_identifier": "",
+      "reproduction_command": "cargo run -q -p audio-effects --bin reverb_corpus_report",
+      "relevant_files": [
+        "crates\\audio-effects\\src\\reverb\\corpus_report.rs",
+        "crates\\audio-effects\\src\\reverb\\metrics.rs",
+        "crates\\audio-effects\\tests\\reverb_corpus_report.rs"
+      ],
+      "done_gate": "concert-hall paired null depth is at least 40 dB in the production corpus report.",
+      "evidence": "production schema v1 reports paired null depth 51.123962 dB for concert-hall",
+      "rank": 3,
+      "assignment_key": "9a2f7dafd5d6fa238a8f"
+    },
+    {
+      "case_id": "concert-hall-pu",
+      "repository_case": "concert-hall transfer",
+      "metric": "pu",
+      "evidence_status": "pass",
+      "current_metric": 0.029470922,
+      "target": 1.0,
+      "gap": 0,
+      "priority_reason": "ship gate satisfied",
+      "task_status": "satisfied",
+      "issue_identifier": "",
+      "reproduction_command": "cargo run -q -p audio-effects --bin reverb_corpus_report",
+      "relevant_files": [
+        "crates\\audio-effects\\src\\reverb\\corpus_report.rs",
+        "crates\\audio-effects\\src\\reverb\\metrics.rs",
+        "crates\\audio-effects\\tests\\reverb_corpus_report.rs"
+      ],
+      "done_gate": "concert-hall PU is at most 1.0 in the production corpus report.",
+      "evidence": "production schema v1 reports PU 0.029470922 for concert-hall",
+      "rank": 4,
+      "assignment_key": "9c56b3f137d8f8d8d2aa"
+    },
+    {
+      "case_id": "medium-room-paired-null-depth-db",
+      "repository_case": "medium-room transfer",
+      "metric": "null_depth_db",
+      "evidence_status": "pass",
+      "current_metric": 54.854843,
+      "target": 40.0,
+      "gap": 0,
+      "priority_reason": "ship gate satisfied",
+      "task_status": "satisfied",
+      "issue_identifier": "",
+      "reproduction_command": "cargo run -q -p audio-effects --bin reverb_corpus_report",
+      "relevant_files": [
+        "crates\\audio-effects\\src\\reverb\\corpus_report.rs",
+        "crates\\audio-effects\\src\\reverb\\metrics.rs",
+        "crates\\audio-effects\\tests\\reverb_corpus_report.rs"
+      ],
+      "done_gate": "medium-room paired null depth is at least 40 dB in the production corpus report.",
+      "evidence": "production schema v1 reports paired null depth 54.854843 dB for medium-room",
+      "rank": 5,
+      "assignment_key": "e18fef5c313b8a38409b"
+    },
+    {
+      "case_id": "medium-room-pu",
+      "repository_case": "medium-room transfer",
+      "metric": "pu",
+      "evidence_status": "pass",
+      "current_metric": 0.09168085,
+      "target": 1.0,
+      "gap": 0,
+      "priority_reason": "ship gate satisfied",
+      "task_status": "satisfied",
+      "issue_identifier": "",
+      "reproduction_command": "cargo run -q -p audio-effects --bin reverb_corpus_report",
+      "relevant_files": [
+        "crates\\audio-effects\\src\\reverb\\corpus_report.rs",
+        "crates\\audio-effects\\src\\reverb\\metrics.rs",
+        "crates\\audio-effects\\tests\\reverb_corpus_report.rs"
+      ],
+      "done_gate": "medium-room PU is at most 1.0 in the production corpus report.",
+      "evidence": "production schema v1 reports PU 0.09168085 for medium-room",
+      "rank": 6,
+      "assignment_key": "9ba70d3a985d74aae44b"
+    },
+    {
+      "case_id": "plate-paired-null-depth-db",
+      "repository_case": "plate transfer",
+      "metric": "null_depth_db",
+      "evidence_status": "pass",
+      "current_metric": 54.074726,
+      "target": 40.0,
+      "gap": 0,
+      "priority_reason": "ship gate satisfied",
+      "task_status": "satisfied",
+      "issue_identifier": "",
+      "reproduction_command": "cargo run -q -p audio-effects --bin reverb_corpus_report",
+      "relevant_files": [
+        "crates\\audio-effects\\src\\reverb\\corpus_report.rs",
+        "crates\\audio-effects\\src\\reverb\\metrics.rs",
+        "crates\\audio-effects\\tests\\reverb_corpus_report.rs"
+      ],
+      "done_gate": "plate paired null depth is at least 40 dB in the production corpus report.",
+      "evidence": "production schema v1 reports paired null depth 54.074726 dB for plate",
+      "rank": 7,
+      "assignment_key": "33f07e4c2be8a3a2c61b"
+    },
+    {
+      "case_id": "plate-pu",
+      "repository_case": "plate transfer",
+      "metric": "pu",
+      "evidence_status": "pass",
+      "current_metric": 0.023093345,
+      "target": 1.0,
+      "gap": 0,
+      "priority_reason": "ship gate satisfied",
+      "task_status": "satisfied",
+      "issue_identifier": "",
+      "reproduction_command": "cargo run -q -p audio-effects --bin reverb_corpus_report",
+      "relevant_files": [
+        "crates\\audio-effects\\src\\reverb\\corpus_report.rs",
+        "crates\\audio-effects\\src\\reverb\\metrics.rs",
+        "crates\\audio-effects\\tests\\reverb_corpus_report.rs"
+      ],
+      "done_gate": "plate PU is at most 1.0 in the production corpus report.",
+      "evidence": "production schema v1 reports PU 0.023093345 for plate",
       "rank": 8,
-      "assignment_key": "090f80cdc8ba37cfb2d4"
+      "assignment_key": "e35184a61990fff6dfdc"
     },
     {
       "case_id": "small-room-paired-null-depth-db",
       "repository_case": "small-room transfer",
       "metric": "null_depth_db",
-      "evidence_status": "fail",
-      "current_metric": -0.6024662,
+      "evidence_status": "pass",
+      "current_metric": 56.120075,
       "target": 40.0,
-      "gap": 40.6024662,
-      "priority_reason": "null-depth gate failure",
-      "task_status": "queued",
+      "gap": 0,
+      "priority_reason": "ship gate satisfied",
+      "task_status": "satisfied",
       "issue_identifier": "",
       "reproduction_command": "cargo run -q -p audio-effects --bin reverb_corpus_report",
       "relevant_files": [
@@ -229,16 +229,16 @@
         "crates\\audio-effects\\tests\\reverb_corpus_report.rs"
       ],
       "done_gate": "small-room paired null depth is at least 40 dB in the production corpus report.",
-      "evidence": "production schema v1 reports paired null depth -0.6024662 dB for small-room",
+      "evidence": "production schema v1 reports paired null depth 56.120075 dB for small-room",
       "rank": 9,
-      "assignment_key": "2ca8e140e8516831c579"
+      "assignment_key": "c740b4696cd0e2400d1a"
     },
     {
       "case_id": "small-room-pu",
       "repository_case": "small-room transfer",
       "metric": "pu",
       "evidence_status": "pass",
-      "current_metric": 0.7432695,
+      "current_metric": 0.27762634,
       "target": 1.0,
       "gap": 0,
       "priority_reason": "ship gate satisfied",
@@ -251,10 +251,10 @@
         "crates\\audio-effects\\tests\\reverb_corpus_report.rs"
       ],
       "done_gate": "small-room PU is at most 1.0 in the production corpus report.",
-      "evidence": "production schema v1 reports PU 0.7432695 for small-room",
+      "evidence": "production schema v1 reports PU 0.27762634 for small-room",
       "rank": 10,
-      "assignment_key": "eb533a1654903649b8ef"
+      "assignment_key": "b1285168ee69d09d20b2"
     }
   ],
-  "report_sha256": "9d8f46ec939e993e7f86096c8e36ebe0a3dc6ef38ded1d293eec21010142c8ec"
+  "report_sha256": "ad4373953ad52d03e76f80c102a3957655ad6f1deaabca9485a37032374a59c0"
 }
