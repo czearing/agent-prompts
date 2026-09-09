@@ -164,3 +164,9 @@ Final disposition: blocked. Unblock owner: issue owner or metric owner. Required
 real failing production reverb gate on current `origin/master`, or explicitly revise the acceptance
 criterion that requires creating an issue when no unsatisfied row exists. The installed task remains
 enabled and continues to obey the specified no-invention dispatch contract.
+
+Control-plane disposition evidence: the blocker comment was accepted by
+`POST /api/issues/3162baa1-d676-48d7-8ac2-f94ac9953ff6/comments`. Two attempts to change status from
+`done` to `blocked` failed: the first required an `unblockDescriptor`, and the second established
+that `unblockDescriptor` must be an object. Per the runtime retry contract, no third status write was
+attempted in this heartbeat; the blocker comment and this task log are the sanctioned fallback.
