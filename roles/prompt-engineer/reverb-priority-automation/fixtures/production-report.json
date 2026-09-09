@@ -1,45 +1,58 @@
 {
-  "schema_version": 1,
-  "rooms": [
+  "schema_version": 2,
+  "matrix": {
+    "rooms": ["small-room"],
+    "sources": ["organ", "piano"],
+    "expected_cells": 2,
+    "pass_count": 1,
+    "total": 2
+  },
+  "cells": [
     {
+      "id": "small-room--organ-to-piano",
+      "reference_source": "organ",
+      "target_source": "piano",
       "room": "small-room",
-      "pu": {"pu_total": 0.7432695},
-      "paired_null_depth_db": -0.6024662,
-      "compared_samples": 365454
+      "reference_mode": "wet-only",
+      "recovery_tier": "SemiBlind",
+      "pu": {"pu_total": 0.75},
+      "paired_rendered_output_null_depth_db": 42.0,
+      "compared_samples": 100,
+      "runtime": {"elapsed_seconds": 1.25, "budget_seconds": 5.0, "passed": true},
+      "passed": true,
+      "done_gate": "Wet-only PU is at most 1.0, paired rendered-output null depth is at least 40 dB, and runtime is at most 5 seconds."
     },
     {
-      "room": "medium-room",
-      "pu": {"pu_total": 2.286499},
-      "paired_null_depth_db": -4.3943944,
-      "compared_samples": 397058
-    },
-    {
-      "room": "concert-hall",
-      "pu": {"pu_total": 1.2151996},
-      "paired_null_depth_db": -5.356182,
-      "compared_samples": 511808
-    },
-    {
-      "room": "cathedral",
-      "pu": {"pu_total": 7.029184},
-      "paired_null_depth_db": -3.5703897,
-      "compared_samples": 904836
-    },
-    {
-      "room": "plate",
-      "pu": {"pu_total": 2.480504},
-      "paired_null_depth_db": -4.0800796,
-      "compared_samples": 510744
+      "id": "small-room--piano-to-organ",
+      "reference_source": "piano",
+      "target_source": "organ",
+      "room": "small-room",
+      "reference_mode": "wet-only",
+      "recovery_tier": "Blind",
+      "pu": {"pu_total": 2.5},
+      "paired_rendered_output_null_depth_db": 20.0,
+      "compared_samples": 100,
+      "runtime": {"elapsed_seconds": 1.5, "budget_seconds": 5.0, "passed": true},
+      "passed": false,
+      "done_gate": "Wet-only PU is at most 1.0, paired rendered-output null depth is at least 40 dB, and runtime is at most 5 seconds."
     }
   ],
-  "runtimes": [
-    {"scenario": "recovery_and_transfer", "budget_seconds": 5.0, "passed": true},
-    {"scenario": "phrase_render", "budget_seconds": 5.0, "passed": true}
-  ],
   "negative_controls": [
-    {"room": "small-room", "passed": true},
-    {"room": "cathedral", "passed": true},
-    {"room": "bright-chamber", "passed": true},
-    {"room": "mono-room", "passed": true}
+    {
+      "control": "wrong-room-input",
+      "expected_room": "small-room",
+      "input": "plate wet organ",
+      "pu_total": 4.0,
+      "paired_rendered_output_null_depth_db": 2.0,
+      "passed": true
+    },
+    {
+      "control": "dry-input",
+      "expected_room": "small-room",
+      "input": "dry organ",
+      "pu_total": null,
+      "paired_rendered_output_null_depth_db": null,
+      "passed": true
+    }
   ]
 }

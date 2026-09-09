@@ -30,8 +30,9 @@ events. Its only downstream actor is the General Software Engineer.
    differs, and runs the production `reverb_corpus_report` entrypoint there. It records the evaluated
    commit in JSON and HTML without modifying the persistent checkout.
 5. Supply `--report` only for deterministic fixture or replay validation. Production schema version
-   1 maps every room's PU and paired null depth to numeric queue rows. Runtime and negative-control
-   pass booleans remain report evidence and are never converted to invented runtime measurements.
+   2 declares every oracle room and source, then maps every ordered pair of distinct sources to one
+   wet-only queue row. Missing matrix cells become actionable failures. Runtime and negative-control
+   measurements remain report evidence and are never replaced with inferred values.
 6. Invoke completion or merge dispatch manually only for diagnostics with:
    `python C:\Code\agent-prompts\roles\prompt-engineer\reverb-priority-automation\scripts\cli.py event issue-completed --repo C:\Code\mix-tool`
    or replace `issue-completed` with `merge`.
@@ -52,10 +53,12 @@ artifacts\reverb-queue.json
 artifacts\reverb-queue.html
 ```
 
-Each row records rank, repository case, current metric, target, gap, priority reason, task status,
-issue identifier, evidence command, relevant files, and done gate. A generated issue carries one
-metric gap, baseline, target, exact reproduction command, relevant files, and measurable completion
-gate.
+The actionable table contains only failed or missing rows in descending gap order. Satisfied
+evidence is shown separately, with explicit actionable, completed, and total counts. Each matrix
+row records reference source, target source, room, wet-only reference mode, PU, paired
+rendered-output null depth, runtime evidence, and the exact done gate. A generated issue carries
+one matrix gap, baseline, target, exact reproduction command, relevant files, and measurable
+completion gate.
 
 ## Rules
 - Never invent, infer, or silently default a metric.

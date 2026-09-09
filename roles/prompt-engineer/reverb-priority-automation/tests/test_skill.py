@@ -61,7 +61,7 @@ class SkillTests(unittest.TestCase):
         self.queue = normalize(report, r"C:\Code\mix-tool", "fixture-commit")
 
     def test_ranking_and_artifacts_are_deterministic(self):
-        expected = ["pu-a", "pu-z", "null", "runtime", "missing", "negative"]
+        expected = ["missing", "null", "pu-a", "pu-z", "runtime", "negative"]
         self.assertEqual(expected, [row["case_id"] for row in self.queue["rows"]])
         with tempfile.TemporaryDirectory() as first, tempfile.TemporaryDirectory() as second:
             first_paths = write_artifacts(self.queue, first)
@@ -81,8 +81,8 @@ class SkillTests(unittest.TestCase):
         self.assertIsNotNone(first)
         self.assertIsNone(second)
         self.assertEqual(1, len(client.created))
-        self.assertIn("hall transfer", client.created[0]["title"])
-        key = assignment_key("fixture-commit", "pu-a")
+        self.assertIn("cathedral paired truth", client.created[0]["title"])
+        key = assignment_key("fixture-commit", "missing")
         self.assertIn(f"{MARKER} {key}", client.created[0]["description"])
         self.assertEqual("in_progress", self.queue["rows"][0]["task_status"])
         self.assertEqual("MUS-1", self.queue["rows"][0]["issue_identifier"])
@@ -148,9 +148,10 @@ class SkillTests(unittest.TestCase):
             }]
         }
         queue = normalize(report, r"C:\Code\mix-tool", "commit")
-        self.assertEqual(1, len(queue["rows"]))
-        self.assertEqual("satisfied", queue["rows"][0]["task_status"])
-        self.assertEqual(0, queue["rows"][0]["gap"])
+        self.assertEqual([], queue["rows"])
+        self.assertEqual(1, len(queue["completed_rows"]))
+        self.assertEqual("satisfied", queue["completed_rows"][0]["task_status"])
+        self.assertEqual(0, queue["completed_rows"][0]["gap"])
 
 
 if __name__ == "__main__":

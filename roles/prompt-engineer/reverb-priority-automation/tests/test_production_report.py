@@ -1,3 +1,4 @@
+import copy
 import json
 import re
 import sys
@@ -19,79 +20,68 @@ class ProductionReportTests(unittest.TestCase):
         )
         self.queue = normalize(self.report, r"C:\Code\mix-tool", "origin-commit")
 
-    def test_all_numeric_rows_have_stable_priority_and_exact_gaps(self):
-        expected = [
-            ("cathedral-pu", 7.029184, 1.0, 6.029184),
-            ("plate-pu", 2.480504, 1.0, 1.480504),
-            ("medium-room-pu", 2.286499, 1.0, 1.286499),
-            ("concert-hall-pu", 1.2151996, 1.0, 0.2151996),
-            ("concert-hall-paired-null-depth-db", -5.356182, 40.0, 45.356182),
-            ("medium-room-paired-null-depth-db", -4.3943944, 40.0, 44.3943944),
-            ("plate-paired-null-depth-db", -4.0800796, 40.0, 44.0800796),
-            ("cathedral-paired-null-depth-db", -3.5703897, 40.0, 43.5703897),
-            ("small-room-paired-null-depth-db", -0.6024662, 40.0, 40.6024662),
-            ("small-room-pu", 0.7432695, 1.0, 0),
-        ]
-        actual = [
-            (
-                row["case_id"], row["current_metric"], row["target"], row["gap"]
-            )
-            for row in self.queue["rows"]
-        ]
-        self.assertEqual(expected, actual)
-        self.assertEqual(10, len(self.queue["rows"]))
-
-    def test_boolean_gate_evidence_is_preserved_without_runtime_measurement(self):
+    def test_complete_matrix_partitions_actionable_and_completed_rows(self):
         self.assertEqual(
-            [
-                {
-                    "scenario": "recovery_and_transfer",
-                    "budget_seconds": 5.0,
-                    "passed": True,
-                },
-                {
-                    "scenario": "phrase_render",
-                    "budget_seconds": 5.0,
-                    "passed": True,
-                },
-            ],
-            self.queue["report_evidence"]["runtimes"],
+            {"actionable": 1, "completed": 1, "total": 2}, self.queue["counts"]
         )
-        self.assertTrue(all(
-            item["passed"]
-            for item in self.queue["report_evidence"]["negative_controls"]
-        ))
-        self.assertNotIn("runtime_seconds", {
-            row["metric"] for row in self.queue["rows"]
-        })
+        self.assertEqual(
+            ["small-room--piano-to-organ"],
+            [row["case_id"] for row in self.queue["rows"]],
+        )
+        self.assertEqual(
+            ["small-room--organ-to-piano"],
+            [row["case_id"] for row in self.queue["completed_rows"]],
+        )
+        row = self.queue["rows"][0]
+        self.assertEqual("piano", row["reference_source"])
+        self.assertEqual("organ", row["target_source"])
+        self.assertEqual("small-room", row["room"])
+        self.assertEqual("wet-only", row["reference_mode"])
+        self.assertEqual(2.5, row["pu"])
+        self.assertEqual(20.0, row["paired_rendered_output_null_depth_db"])
+        self.assertEqual(1.5, row["gap"])
 
-    def test_json_and_html_share_order_and_show_commit(self):
+    def test_omitted_matrix_cell_becomes_highest_priority_failure(self):
+        incomplete = copy.deepcopy(self.report)
+        incomplete["cells"].pop()
+        queue = normalize(incomplete, r"C:\Code\mix-tool", "origin-commit")
+        self.assertFalse(queue["report_evidence"]["matrix"]["complete"])
+        self.assertEqual(1, queue["report_evidence"]["matrix"]["reported"])
+        self.assertEqual(2, queue["report_evidence"]["matrix"]["expected"])
+        self.assertEqual("small-room--piano-to-organ", queue["rows"][0]["case_id"])
+        self.assertEqual("missing", queue["rows"][0]["evidence_status"])
+        self.assertEqual(1, queue["counts"]["actionable"])
+
+    def test_json_and_html_have_identical_actionable_order_and_counts(self):
         with tempfile.TemporaryDirectory() as directory:
             json_path, html_path = write_artifacts(self.queue, directory)
             persisted = json.loads(json_path.read_text(encoding="utf-8"))
             html = html_path.read_text(encoding="utf-8")
-        json_order = [row["case_id"] for row in persisted["rows"]]
-        html_order = re.findall(r'<tr data-case-id="([^"]+)">', html)
-        self.assertEqual(json_order, html_order)
-        self.assertIn("origin-commit", html)
-        self.assertIn("recovery_and_transfer: budget 5 seconds, passed true", html)
-        self.assertIn("small-room: passed true", html)
+        actionable_html = html.split("<h2>Satisfied evidence</h2>", 1)[0]
+        html_order = re.findall(r'<tr data-case-id="([^"]+)">', actionable_html)
+        self.assertEqual([row["case_id"] for row in persisted["rows"]], html_order)
+        self.assertIn("Actionable: 1", html)
+        self.assertIn("Completed: 1", html)
+        self.assertNotIn("small-room--organ-to-piano", actionable_html)
+        self.assertIn("small-room--organ-to-piano", html)
 
-    def test_supported_empty_report_fails(self):
-        report = {
-            "schema_version": 1,
-            "rooms": [],
-            "runtimes": [{"scenario": "transfer", "budget_seconds": 5.0, "passed": True}],
-            "negative_controls": [{"room": "dry", "passed": True}],
-        }
-        with self.assertRaisesRegex(
-            ValueError, "production report normalized to zero rows"
-        ):
-            normalize(report, r"C:\Code\mix-tool", "origin-commit")
+    def test_inconsistent_pass_flag_is_rejected(self):
+        inconsistent = copy.deepcopy(self.report)
+        inconsistent["cells"][1]["passed"] = True
+        with self.assertRaisesRegex(ValueError, "passed flag disagrees"):
+            normalize(inconsistent, r"C:\Code\mix-tool", "origin-commit")
 
-    def test_unsupported_schema_fails(self):
-        with self.assertRaisesRegex(ValueError, "unsupported report schema"):
-            normalize({"schema_version": 1, "measurements": []}, "repo", "commit")
+    def test_inconsistent_runtime_flag_is_rejected(self):
+        inconsistent = copy.deepcopy(self.report)
+        inconsistent["cells"][0]["runtime"]["passed"] = False
+        with self.assertRaisesRegex(ValueError, "runtime passed flag disagrees"):
+            normalize(inconsistent, r"C:\Code\mix-tool", "origin-commit")
+
+    def test_negative_control_failure_is_rejected(self):
+        failed = copy.deepcopy(self.report)
+        failed["negative_controls"][0]["passed"] = False
+        with self.assertRaisesRegex(ValueError, "negative controls must pass"):
+            normalize(failed, r"C:\Code\mix-tool", "origin-commit")
 
 
 if __name__ == "__main__":

@@ -1,142 +1,181 @@
-PRODUCTION_KEYS = {"rooms", "runtimes", "negative_controls"}
+PRODUCTION_KEYS = {"matrix", "cells", "negative_controls"}
 REPORT_COMMAND = "cargo run -q -p audio-effects --bin reverb_corpus_report"
 REPORT_FILES = [
     r"crates\audio-effects\src\reverb\corpus_report.rs",
-    r"crates\audio-effects\src\reverb\metrics.rs",
+    r"crates\audio-effects\src\reverb\corpus_report\matrix.rs",
+    r"crates\audio-effects\src\reverb\corpus_report\controls.rs",
     r"crates\audio-effects\tests\reverb_corpus_report.rs",
 ]
+DONE_GATE = (
+    "Wet-only PU is at most 1.0, paired rendered-output null depth is at least "
+    "40 dB, and runtime is at most 5 seconds."
+)
 
 
-def _require_mapping(value, label):
+def _mapping(value, label):
     if not isinstance(value, dict):
         raise ValueError(f"{label} must be an object")
     return value
 
 
-def _require_list(report, field):
-    value = report.get(field)
+def _list(value, label):
     if not isinstance(value, list):
-        raise ValueError(f"production report {field} must be an array")
+        raise ValueError(f"{label} must be an array")
     return value
 
 
-def _require_text(value, label):
+def _text(value, label):
     if not isinstance(value, str) or not value:
         raise ValueError(f"{label} must be a nonempty string")
     return value
 
 
-def _require_number(value, label):
+def _number(value, label):
     if not isinstance(value, (int, float)) or isinstance(value, bool):
         raise ValueError(f"{label} must be numeric")
     return value
 
 
-def _require_boolean(value, label):
-    if not isinstance(value, bool):
-        raise ValueError(f"{label} must be boolean")
-    return value
+def _names(matrix, field):
+    names = [_text(value, f"matrix.{field}") for value in _list(
+        matrix.get(field), f"matrix.{field}"
+    )]
+    if not names or len(names) != len(set(names)):
+        raise ValueError(f"matrix.{field} must contain unique names")
+    return names
 
 
-def _room_cases(rooms):
+def _cell_case(raw, expected_id, room, reference, target):
+    cell = _mapping(raw, f"cells[{expected_id}]")
+    for field, value in (
+        ("id", expected_id),
+        ("room", room),
+        ("reference_source", reference),
+        ("target_source", target),
+        ("reference_mode", "wet-only"),
+        ("done_gate", DONE_GATE),
+    ):
+        if cell.get(field) != value:
+            raise ValueError(f"{expected_id} has invalid {field}")
+    runtime = _mapping(cell.get("runtime"), f"{expected_id}.runtime")
+    elapsed = _number(runtime.get("elapsed_seconds"), f"{expected_id}.runtime.elapsed_seconds")
+    if _number(runtime.get("budget_seconds"), f"{expected_id}.runtime.budget_seconds") != 5.0:
+        raise ValueError(f"{expected_id} runtime budget must be 5.0")
+    runtime_passed = runtime.get("passed")
+    if not isinstance(runtime_passed, bool) or runtime_passed != (elapsed <= 5.0):
+        raise ValueError(f"{expected_id} runtime passed flag disagrees with elapsed time")
+    pu = cell.get("pu")
+    pu_mapping = None if pu is None else _mapping(pu, f"{expected_id}.pu")
+    pu_value = None if pu_mapping is None else pu_mapping.get("pu_total")
+    pu_total = (
+        None
+        if pu_value is None
+        else _number(pu_value, f"{expected_id}.pu.pu_total")
+    )
+    null_depth = cell.get("paired_rendered_output_null_depth_db")
+    if null_depth is not None:
+        null_depth = _number(null_depth, f"{expected_id}.paired_rendered_output_null_depth_db")
+    passed = (
+        pu_total is not None
+        and pu_total <= 1.0
+        and null_depth is not None
+        and null_depth >= 40.0
+        and runtime_passed
+    )
+    if cell.get("passed") is not passed:
+        raise ValueError(f"{expected_id} passed flag disagrees with its gate evidence")
+    return {
+        "id": expected_id,
+        "repository_case": f"{room}: {reference} to {target}",
+        "metric": "wet_only_matrix",
+        "status": "pass" if passed else "fail",
+        "value": {
+            "pu": pu_total,
+            "paired_rendered_output_null_depth_db": null_depth,
+            "runtime_seconds": elapsed,
+        },
+        "target": {"pu": 1.0, "null_depth_db": 40.0, "runtime_seconds": 5.0},
+        "command": REPORT_COMMAND,
+        "files": REPORT_FILES,
+        "evidence": (
+            f"wet-only {cell.get('recovery_tier')} recovery; PU {pu_total}; "
+            f"paired rendered-output null depth {null_depth} dB; runtime {elapsed} seconds"
+        ),
+        "done_gate": DONE_GATE,
+        "reference_source": reference,
+        "target_source": target,
+        "room": room,
+        "reference_mode": "wet-only",
+        "pu": pu_total,
+        "paired_rendered_output_null_depth_db": null_depth,
+        "runtime_evidence": runtime,
+    }
+
+
+def _missing_case(case_id, room, reference, target):
+    return {
+        "id": case_id, "repository_case": f"{room}: {reference} to {target}",
+        "metric": "wet_only_matrix", "status": "missing", "value": None,
+        "target": {"pu": 1.0, "null_depth_db": 40.0, "runtime_seconds": 5.0},
+        "command": REPORT_COMMAND, "files": REPORT_FILES,
+        "evidence": "expected wet-only matrix cell is absent", "done_gate": DONE_GATE,
+        "reference_source": reference, "target_source": target, "room": room,
+        "reference_mode": "wet-only", "pu": None,
+        "paired_rendered_output_null_depth_db": None, "runtime_evidence": None,
+    }
+
+
+def _production_cases(report):
+    matrix = _mapping(report["matrix"], "matrix")
+    rooms, sources = _names(matrix, "rooms"), _names(matrix, "sources")
+    expected_total = len(rooms) * len(sources) * (len(sources) - 1)
+    if matrix.get("expected_cells") != expected_total:
+        raise ValueError("matrix expected_cells disagrees with declared dimensions")
+    supplied = {}
+    for raw in _list(report["cells"], "cells"):
+        cell = _mapping(raw, "cell")
+        case_id = _text(cell.get("id"), "cell.id")
+        if case_id in supplied:
+            raise ValueError(f"duplicate matrix cell: {case_id}")
+        supplied[case_id] = cell
     cases = []
-    seen = set()
-    for index, raw_room in enumerate(rooms):
-        room = _require_mapping(raw_room, f"rooms[{index}]")
-        name = _require_text(room.get("room"), f"rooms[{index}].room")
-        if name in seen:
-            raise ValueError(f"duplicate production room: {name}")
-        seen.add(name)
-        pu = _require_mapping(room.get("pu"), f"rooms[{index}].pu")
-        pu_total = _require_number(pu.get("pu_total"), f"rooms[{index}].pu.pu_total")
-        null_depth = _require_number(
-            room.get("paired_null_depth_db"),
-            f"rooms[{index}].paired_null_depth_db",
-        )
-        common = {
-            "repository_case": f"{name} transfer",
-            "command": REPORT_COMMAND,
-            "files": REPORT_FILES,
-        }
-        cases.extend([
-            {
-                **common,
-                "id": f"{name}-pu",
-                "metric": "pu",
-                "status": "pass" if pu_total <= 1.0 else "fail",
-                "value": pu_total,
-                "target": 1.0,
-                "evidence": f"production schema v1 reports PU {pu_total} for {name}",
-                "done_gate": f"{name} PU is at most 1.0 in the production corpus report.",
-            },
-            {
-                **common,
-                "id": f"{name}-paired-null-depth-db",
-                "metric": "null_depth_db",
-                "status": "pass" if null_depth >= 40.0 else "fail",
-                "value": null_depth,
-                "target": 40.0,
-                "evidence": (
-                    f"production schema v1 reports paired null depth "
-                    f"{null_depth} dB for {name}"
-                ),
-                "done_gate": (
-                    f"{name} paired null depth is at least 40 dB in the "
-                    "production corpus report."
-                ),
-            },
-        ])
-    return cases
-
-
-def _gate_evidence(report):
-    runtimes = []
-    for index, raw_runtime in enumerate(_require_list(report, "runtimes")):
-        runtime = _require_mapping(raw_runtime, f"runtimes[{index}]")
-        runtimes.append({
-            "scenario": _require_text(
-                runtime.get("scenario"), f"runtimes[{index}].scenario"
-            ),
-            "budget_seconds": _require_number(
-                runtime.get("budget_seconds"), f"runtimes[{index}].budget_seconds"
-            ),
-            "passed": _require_boolean(
-                runtime.get("passed"), f"runtimes[{index}].passed"
-            ),
-        })
-    controls = []
-    for index, raw_control in enumerate(_require_list(report, "negative_controls")):
-        control = _require_mapping(raw_control, f"negative_controls[{index}]")
-        controls.append({
-            "room": _require_text(
-                control.get("room"), f"negative_controls[{index}].room"
-            ),
-            "passed": _require_boolean(
-                control.get("passed"), f"negative_controls[{index}].passed"
-            ),
-        })
-    return {"runtimes": runtimes, "negative_controls": controls}
+    for room in rooms:
+        for reference in sources:
+            for target in sources:
+                if reference == target:
+                    continue
+                case_id = f"{room}--{reference}-to-{target}"
+                raw = supplied.pop(case_id, None)
+                cases.append(
+                    _missing_case(case_id, room, reference, target)
+                    if raw is None else _cell_case(raw, case_id, room, reference, target)
+                )
+    if supplied:
+        raise ValueError(f"unexpected matrix cells: {sorted(supplied)}")
+    controls = [_mapping(item, "negative control") for item in _list(
+        report["negative_controls"], "negative_controls"
+    )]
+    if not controls or not all(item.get("passed") is True for item in controls):
+        raise ValueError("all wrong-room and dry negative controls must pass")
+    evidence = {
+        "matrix": {
+            "expected": expected_total,
+            "reported": len(report["cells"]),
+            "complete": len(report["cells"]) == expected_total,
+        },
+        "negative_controls": controls,
+    }
+    return cases, evidence
 
 
 def report_cases(report):
     if not isinstance(report, dict):
         raise ValueError("report must be an object")
     if "cases" in report and not PRODUCTION_KEYS.intersection(report):
-        cases = report["cases"]
-        if not isinstance(cases, list):
-            raise ValueError("report cases must be an array")
-        return cases, {}
-    if PRODUCTION_KEYS.intersection(report):
-        missing = PRODUCTION_KEYS.difference(report)
-        if missing:
-            raise ValueError(f"production report missing fields: {sorted(missing)}")
-        if report.get("schema_version") != 1:
-            raise ValueError(
-                f"unsupported production schema version: {report.get('schema_version')}"
-            )
-        rooms = _require_list(report, "rooms")
-        cases = _room_cases(rooms)
-        if not cases:
-            raise ValueError("nonempty production report normalized to zero rows")
-        return cases, _gate_evidence(report)
-    raise ValueError("unsupported report schema")
+        return _list(report["cases"], "report cases"), {}
+    missing = PRODUCTION_KEYS.difference(report)
+    if missing:
+        raise ValueError(f"production report missing fields: {sorted(missing)}")
+    if report.get("schema_version") != 2:
+        raise ValueError(f"unsupported production schema version: {report.get('schema_version')}")
+    return _production_cases(report)

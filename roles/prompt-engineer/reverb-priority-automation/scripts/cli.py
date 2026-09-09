@@ -62,7 +62,7 @@ def refresh(args):
     with _origin_master_checkout(repo) as (checkout, commit):
         if args.report:
             report_bytes = Path(args.report).read_bytes()
-            report = json.loads(report_bytes.decode("utf-8"))
+            report = json.loads(report_bytes.decode("utf-8-sig"))
         else:
             report_bytes, report = _production_report(checkout)
     queue = normalize(report, str(repo), commit)
