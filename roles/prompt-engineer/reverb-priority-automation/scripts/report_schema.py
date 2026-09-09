@@ -1,10 +1,10 @@
 PRODUCTION_KEYS = {"matrix", "cells", "negative_controls"}
 REPORT_COMMAND = "cargo run -q -p audio-effects --bin reverb_corpus_report"
 REPORT_FILES = [
-    r"crates\audio-effects\src\reverb\corpus_report.rs",
-    r"crates\audio-effects\src\reverb\corpus_report\matrix.rs",
-    r"crates\audio-effects\src\reverb\corpus_report\controls.rs",
-    r"crates\audio-effects\tests\reverb_corpus_report.rs",
+    "crates/audio-effects/src/reverb/corpus_report.rs",
+    "crates/audio-effects/src/reverb/corpus_report/matrix.rs",
+    "crates/audio-effects/src/reverb/corpus_report/controls.rs",
+    "crates/audio-effects/tests/reverb_corpus_report.rs",
 ]
 DONE_GATE = (
     "Wet-only PU is at most 1.0, paired rendered-output null depth is at least "
