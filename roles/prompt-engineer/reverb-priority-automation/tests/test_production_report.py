@@ -77,11 +77,17 @@ class ProductionReportTests(unittest.TestCase):
         with self.assertRaisesRegex(ValueError, "runtime passed flag disagrees"):
             normalize(inconsistent, r"C:\Code\mix-tool", "origin-commit")
 
-    def test_negative_control_failure_is_rejected(self):
+    def test_negative_control_failure_is_actionable(self):
         failed = copy.deepcopy(self.report)
         failed["negative_controls"][0]["passed"] = False
-        with self.assertRaisesRegex(ValueError, "negative controls must pass"):
-            normalize(failed, r"C:\Code\mix-tool", "origin-commit")
+        queue = normalize(failed, r"C:\Code\mix-tool", "origin-commit")
+        self.assertEqual(2, queue["counts"]["actionable"])
+        control = next(
+            row for row in queue["rows"]
+            if row["case_id"] == "negative-control--wrong-room-input"
+        )
+        self.assertEqual("unsupported evidence was accepted", control["priority_reason"])
+        self.assertEqual(False, control["current_metric"])
 
 
 if __name__ == "__main__":

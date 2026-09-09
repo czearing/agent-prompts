@@ -125,6 +125,46 @@ def _missing_case(case_id, room, reference, target):
     }
 
 
+def _control_cases(raw_controls):
+    expected = {"wrong-room-input", "dry-input"}
+    supplied = {}
+    for index, raw in enumerate(_list(raw_controls, "negative_controls")):
+        control = _mapping(raw, f"negative_controls[{index}]")
+        name = _text(control.get("control"), f"negative_controls[{index}].control")
+        if name in supplied:
+            raise ValueError(f"duplicate negative control: {name}")
+        if name not in expected:
+            raise ValueError(f"unexpected negative control: {name}")
+        supplied[name] = control
+    cases = []
+    for name in sorted(expected):
+        control = supplied.get(name)
+        if control is None:
+            status, value, evidence = "missing", None, f"{name} evidence is absent"
+        else:
+            _text(control.get("expected_room"), f"{name}.expected_room")
+            _text(control.get("input"), f"{name}.input")
+            value = control.get("passed")
+            if not isinstance(value, bool):
+                raise ValueError(f"{name}.passed must be boolean")
+            status = "pass" if value else "fail"
+            evidence = f"{name} passed: {value}"
+        if status != "pass":
+            cases.append({
+                "id": f"negative-control--{name}",
+                "repository_case": name,
+                "metric": "negative_control",
+                "status": status,
+                "value": value,
+                "target": True,
+                "command": REPORT_COMMAND,
+                "files": REPORT_FILES,
+                "evidence": evidence,
+                "done_gate": f"{name} does not satisfy the wet-only ship gate.",
+            })
+    return cases, [supplied[name] for name in sorted(supplied)]
+
+
 def _production_cases(report):
     matrix = _mapping(report["matrix"], "matrix")
     rooms, sources = _names(matrix, "rooms"), _names(matrix, "sources")
@@ -152,11 +192,8 @@ def _production_cases(report):
                 )
     if supplied:
         raise ValueError(f"unexpected matrix cells: {sorted(supplied)}")
-    controls = [_mapping(item, "negative control") for item in _list(
-        report["negative_controls"], "negative_controls"
-    )]
-    if not controls or not all(item.get("passed") is True for item in controls):
-        raise ValueError("all wrong-room and dry negative controls must pass")
+    control_cases, controls = _control_cases(report["negative_controls"])
+    cases.extend(control_cases)
     evidence = {
         "matrix": {
             "expected": expected_total,
