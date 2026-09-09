@@ -1,0 +1,58 @@
+{
+  "schema_version": 2,
+  "matrix": {
+    "rooms": ["small-room"],
+    "sources": ["organ", "piano"],
+    "expected_cells": 2,
+    "pass_count": 1,
+    "total": 2
+  },
+  "cells": [
+    {
+      "id": "small-room--organ-to-piano",
+      "reference_source": "organ",
+      "target_source": "piano",
+      "room": "small-room",
+      "reference_mode": "wet-only",
+      "recovery_tier": "SemiBlind",
+      "pu": {"pu_total": 0.75},
+      "paired_rendered_output_null_depth_db": 42.0,
+      "compared_samples": 100,
+      "runtime": {"elapsed_seconds": 1.25, "budget_seconds": 5.0, "passed": true},
+      "passed": true,
+      "done_gate": "Wet-only PU is at most 1.0, paired rendered-output null depth is at least 40 dB, and runtime is at most 5 seconds."
+    },
+    {
+      "id": "small-room--piano-to-organ",
+      "reference_source": "piano",
+      "target_source": "organ",
+      "room": "small-room",
+      "reference_mode": "wet-only",
+      "recovery_tier": "Blind",
+      "pu": {"pu_total": 2.5},
+      "paired_rendered_output_null_depth_db": 20.0,
+      "compared_samples": 100,
+      "runtime": {"elapsed_seconds": 1.5, "budget_seconds": 5.0, "passed": true},
+      "passed": false,
+      "done_gate": "Wet-only PU is at most 1.0, paired rendered-output null depth is at least 40 dB, and runtime is at most 5 seconds."
+    }
+  ],
+  "negative_controls": [
+    {
+      "control": "wrong-room-input",
+      "expected_room": "small-room",
+      "input": "plate wet organ",
+      "pu_total": 4.0,
+      "paired_rendered_output_null_depth_db": 2.0,
+      "passed": true
+    },
+    {
+      "control": "dry-input",
+      "expected_room": "small-room",
+      "input": "dry organ",
+      "pu_total": null,
+      "paired_rendered_output_null_depth_db": null,
+      "passed": true
+    }
+  ]
+}

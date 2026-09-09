@@ -1,0 +1,76 @@
+{
+  "commit": "fixture-commit",
+  "cases": [
+    {
+      "id": "pu-z",
+      "repository_case": "plate transfer",
+      "metric": "pu",
+      "status": "fail",
+      "value": 4.0,
+      "target": 1.0,
+      "command": "run plate metric",
+      "files": ["metrics.rs"],
+      "evidence": "actual fixture PU 4.0",
+      "done_gate": "Plate PU is below 1.0."
+    },
+    {
+      "id": "pu-a",
+      "repository_case": "hall transfer",
+      "metric": "pu",
+      "status": "fail",
+      "value": 4.0,
+      "target": 1.0,
+      "command": "run hall metric",
+      "files": ["metrics.rs"],
+      "evidence": "actual fixture PU 4.0",
+      "done_gate": "Hall PU is below 1.0."
+    },
+    {
+      "id": "null",
+      "repository_case": "paired truth",
+      "metric": "null_depth_db",
+      "status": "fail",
+      "value": 20.0,
+      "target": 40.0,
+      "command": "run null metric",
+      "files": ["metrics.rs"],
+      "evidence": "actual fixture null depth 20 dB",
+      "done_gate": "Null depth is at least 40 dB."
+    },
+    {
+      "id": "runtime",
+      "repository_case": "timing case",
+      "metric": "runtime_seconds",
+      "status": "fail",
+      "value": 7.0,
+      "target": 5.0,
+      "command": "run timing case",
+      "files": ["reverb_phrasing.rs"],
+      "evidence": "actual fixture runtime 7 seconds",
+      "done_gate": "Runtime is below 5 seconds."
+    },
+    {
+      "id": "missing",
+      "repository_case": "cathedral paired truth",
+      "metric": "null_depth_db",
+      "status": "missing",
+      "target": 40.0,
+      "command": "run corpus report",
+      "files": ["reverb_transfer.rs"],
+      "evidence": "fixture intentionally omits paired evidence",
+      "done_gate": "Corpus report contains the paired null depth."
+    },
+    {
+      "id": "negative",
+      "repository_case": "dry reference",
+      "metric": "negative_control",
+      "status": "fail",
+      "value": false,
+      "target": true,
+      "command": "run dry reference case",
+      "files": ["reverb_transfer.rs"],
+      "evidence": "fixture accepted unsupported evidence",
+      "done_gate": "Dry reference is declined."
+    }
+  ]
+}
