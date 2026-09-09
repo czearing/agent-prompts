@@ -1,0 +1,45 @@
+{
+  "schema_version": 1,
+  "rooms": [
+    {
+      "room": "small-room",
+      "pu": {"pu_total": 0.7432695},
+      "paired_null_depth_db": -0.6024662,
+      "compared_samples": 365454
+    },
+    {
+      "room": "medium-room",
+      "pu": {"pu_total": 2.286499},
+      "paired_null_depth_db": -4.3943944,
+      "compared_samples": 397058
+    },
+    {
+      "room": "concert-hall",
+      "pu": {"pu_total": 1.2151996},
+      "paired_null_depth_db": -5.356182,
+      "compared_samples": 511808
+    },
+    {
+      "room": "cathedral",
+      "pu": {"pu_total": 7.029184},
+      "paired_null_depth_db": -3.5703897,
+      "compared_samples": 904836
+    },
+    {
+      "room": "plate",
+      "pu": {"pu_total": 2.480504},
+      "paired_null_depth_db": -4.0800796,
+      "compared_samples": 510744
+    }
+  ],
+  "runtimes": [
+    {"scenario": "recovery_and_transfer", "budget_seconds": 5.0, "passed": true},
+    {"scenario": "phrase_render", "budget_seconds": 5.0, "passed": true}
+  ],
+  "negative_controls": [
+    {"room": "small-room", "passed": true},
+    {"room": "cathedral", "passed": true},
+    {"room": "bright-chamber", "passed": true},
+    {"room": "mono-room", "passed": true}
+  ]
+}
