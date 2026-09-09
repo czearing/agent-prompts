@@ -152,11 +152,12 @@ violate the queue contract. A following runnable-work tick therefore cannot be o
 - [ ] Live scheduler verification blocked after the empty-slot natural tick found zero unsatisfied rows.
 - [x] No repository change-file convention was found.
 - [x] Required automated gates passed.
-- [x] Branch pushed; pull request creation is pending.
+- [x] Branch pushed and pull request opened.
 - [x] All placeholders removed.
 
-Pull request: pending
-Commit: `98da3125efd0d0f3c473a375319a4bf4d60a13af`
+Pull request: https://github.com/czearing/agent-prompts/pull/1
+Implementation commit: `98da3125efd0d0f3c473a375319a4bf4d60a13af`
+Evidence commit: `0fc51c4`
 Merge status: blocked because current production evidence has no unsatisfied successor to dispatch.
 
 Final disposition: blocked. Unblock owner: issue owner or metric owner. Required action: provide a
